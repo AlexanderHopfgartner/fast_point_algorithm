@@ -9,6 +9,16 @@ def clear():
         _ = system('clear')
 
 
+def debug_print_maze(maze):
+    """prints:
+
+    Point name///Connection name///Connection price///start///end"""
+    print([x.name for x in maze.points])
+    print([x.name for x in maze.connections])
+    print([x.price for x in maze.connections])
+    print(maze.start, maze.end, "\n")
+
+
 class Bot:
     def __init__(self, bot_name="Fridolin", start=0):
         self.name = bot_name
@@ -31,12 +41,37 @@ class Bot:
 
 class PointBuilding:
     """Takes a size: int, """
-    def __init__(self, size: int):
-        self.points_amount = size
-        self.points = self.points_self()
-        self.connections = self.connect_self()
-        self.start = self.start_self()
-        self.end = self.end_self()
+
+    def connect_in_range(self, distances: list[int] = ""):
+        """Return a list of all Connections, By the points.
+        ints form the list, set the fixed distance form the points
+
+        If any int in the distance: list[int] >= point_amount it become default
+
+        By default, [1, 2]"""
+        all_connections = []
+        if distances == "":
+            distances = [1, 2]
+        for x in distances:
+            if x >= self.points_amount:
+                distances = [1, 2]
+        for distance in distances:
+            for point in range(len(self.points) - distance):
+                all_connections.append(Connection([self.points[point], self.points[point + int(distance)]]))
+        self.connections = all_connections
+        return all_connections
+
+    def connect_self(self):
+        """Return a list of connects in range [1, 2]"""
+        return self.connect_in_range([1, 2])
+
+    def end_self(self):
+        """Return random end Point"""
+        return self.points[randint(0, len(self.points) - 1)]
+
+    def points_self(self):
+        """Return a list of Points in the range of the points_amount"""
+        return [Point(x) for x in range(self.points_amount)]
 
     def rebuild_build_points(self, size: int = 8, distance: list[int] = [1, 2],
                              price_start: int = 3, price_end: int = 6, start: int = 0, end: int = -1):
@@ -56,47 +91,13 @@ class PointBuilding:
             connection.recalculate_price(start=price_start, end=price_end)
         self.set_start_end(start, end)
 
-    def points_self(self):
-        return [Point(x) for x in range(self.points_amount)]
-
-    def connect_self(self):
-        return self.connect_in_range([1, 2])
-
-    def connect_in_range(self, distances: list[int] = ""):
-        """Return a list of all Connections, By the points.
-        ints form the list, set the fixed distance form the points
-
-        If any int in the distance: list[int] >= point_amount it become default
-
-        By default, [1, 2]"""
-        print(distances)
-        all_connections = []
-        if distances == "":
-            distances = [1, 2]
-        for x in distances:
-            if x >= self.points_amount:
-                distances = [1, 2]
-        for distance in distances:
-            for point in range(len(self.points)-distance):
-                all_connections.append(Connection([self.points[point], self.points[point+int(distance)]]))
-        self.connections = all_connections
-        return all_connections
-
-    def start_self(self):
-        """Return random start Point"""
-        return self.points[randint(0, len(self.points)-1)]
-
-    def end_self(self):
-        """Return random end Point"""
-        return self.points[randint(0, len(self.points) - 1)]
+    def set_end(self, end):
+        """Change the end to the taken index"""
+        self.end = self.points[end]
 
     def set_start(self, start):
         """Change the start to the taken index"""
         self.start = self.points[start]
-
-    def set_end(self, end):
-        """Change the end to the taken index"""
-        self.end = self.points[end]
 
     def set_start_end(self, *args, **kwargs):
         """Change the start and the end to the given kwargs. By default, RANDOM
@@ -117,12 +118,23 @@ class PointBuilding:
         else:
             self.set_end([kwargs["end"]])
 
+    def start_self(self):
+        """Return random start Point"""
+        return self.points[randint(0, len(self.points) - 1)]
+
+    def __init__(self, size: int):
+        self.points_amount = size
+        self.points = self.points_self()
+        self.connections = self.connect_self()
+        self.start = self.start_self()
+        self.end = self.end_self()
+
 
 class Point:
     def __init__(self, x=0):
         self.id = x
         """Id of the Point"""
-        self.name = f"Point {x+1}"
+        self.name = f"Point {x + 1}"
         """Name of the Class"""
 
     def __call__(self, *args, **kwargs):
@@ -140,6 +152,13 @@ class Connection:
 
     By default, a price:
         in range of 3-6 INCLUDING start and end"""
+
+    def recalculate_price(self, start=3, end=6):
+        """Recalculate the price of a Connection.
+
+        By Default start=3, end=6 including start and end"""
+        self.price = randint(start, end)
+
     def __init__(self, x: list):
         self.name = f"Connection of {x[0].name} and {x[1].name}"
         """Name of the Connection"""
@@ -157,15 +176,3 @@ class Connection:
     def __repr__(self):
         return self.name
 
-    def recalculate_price(self, start=3, end=6):
-        """Recalculate the price of a Connection.
-
-        By Default start=3, end=6 including start and end"""
-        self.price = randint(start, end)
-
-
-def debug_print_maze(maze):
-    print([x.name for x in maze.points])
-    print([x.name for x in maze.connections])
-    print([x.price for x in maze.connections])
-    print(maze.start, maze.end, "\n")
