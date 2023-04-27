@@ -1,5 +1,6 @@
 from random import randint
 from os import system, name
+from time import time
 
 
 def clear():
@@ -17,6 +18,22 @@ def debug_print_maze(maze):
     print([x.name for x in maze.connections])
     print([x.price for x in maze.connections])
     print(maze.start, maze.end, "\n")
+
+class Timer:
+
+    def time_stop(self):
+        self.time_stop.append(time())
+        print(self.time_stop[-1] - self.start)
+
+    def end_time(self):
+        print(time() - self.start)
+
+
+    def __init__(self):
+        self.start = time()
+        self.time_stop = []
+
+
 
 
 class Bot:
