@@ -1,23 +1,16 @@
-from map_build import Bot, PointBuilding, debug_print_maze, clear, Timer
+from map_build import PointBuilding, debug_print_maze, Timer
+from map_build_assets.bot import Bot
 
 
 def main():
     # TODO 1. Build the maze
-    size = int(input("size: "))
     timer = Timer()
-    maze = PointBuilding(size)
-    debug_print_maze(maze)
-    timer.end_time()
-    timer1 = Timer()
-    fred = Bot(bot_name="Fred", maze=maze)
+    maze = PointBuilding(64)
+    print(maze.start)
+    fred = Bot(maze=maze)
     fred.find_path()
-    print(fred.current_point)
-    print(fred.investment)
-    timer1.end_time()
-
-    # TODO 1.1. Build the points
-
-    # TODO 1.2. Connect the points
+    debug_print_maze(maze, fred)
+    timer.end_time()
 
 
 if __name__ == "__main__":

@@ -35,6 +35,8 @@ class Connection:
         """List of two Points"""
         self.price = randint(3, 6)
         """Price to use the Path"""
+        self.direction: bool = True if connection1.id < connection2.id else False
+        """True if the conneciton direction is increasing in id"""
         connection1.connections.append(self)
         connection2.connections.append(self)
 

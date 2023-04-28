@@ -1,8 +1,8 @@
 from random import randint
 from os import system, name
 from time import time
-from conneciton import Connection
-from point import Point
+from map_build_assets.conneciton import Connection
+from map_build_assets.point import Point
 
 
 def clear():
@@ -12,7 +12,7 @@ def clear():
         _ = system('clear')
 
 
-def debug_print_maze(maze):
+def debug_print_maze(maze, bot):
     """prints:
 
     Point name///Connection name///Connection price///start///end"""
@@ -20,7 +20,7 @@ def debug_print_maze(maze):
     print([x.name for x in maze.connections])
     print([x.price for x in maze.connections])
     print(maze.start, maze.end, "\n")
-
+    print(bot.investment)
 
 class Timer:
 
