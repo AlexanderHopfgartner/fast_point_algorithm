@@ -1,6 +1,4 @@
 from map_build import Bot, PointBuilding, debug_print_maze, clear, Timer
-from time import time, sleep
-
 
 
 def main():
@@ -16,7 +14,6 @@ def main():
     print(fred.current_point)
     print(fred.investment)
     timer1.end_time()
-
 
     # TODO 1.1. Build the points
 

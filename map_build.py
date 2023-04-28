@@ -1,6 +1,8 @@
 from random import randint
 from os import system, name
 from time import time
+from conneciton import Connection
+from point import Point
 
 
 def clear():
@@ -28,7 +30,6 @@ class Timer:
 
     def end_time(self):
         print(time() - self.start)
-
 
     def __init__(self):
         self.start = time()
@@ -119,13 +120,11 @@ class PointBuilding:
         """Return random start Point"""
         return self.points[randint(0, len(self.points) - 1)]
 
-    def take_connection(self, bot, position, connection):
-        """Add the investment of the Connection changes the current locaiton from the bot
+    def take_connection(self, position, connection):
+        """Add the investment of the Connection changes the current location from the bot
 
-        bot: Bot, position: Positon, connection: Conneciton"""
-        bot.current_point = connection.take(bot, position)
-
-
+        bot: Bot, position: Position, connection: Conneciton"""
+        self.position.current_point = connection.take(self.position, position)
 
     def __init__(self, size: int):
         self.points_amount = size
@@ -133,99 +132,4 @@ class PointBuilding:
         self.connections = self.connect_self()
         self.start = self.start_self()
         self.end = self.end_self()
-
-
-class Point:
-
-    def add_conneciton(self, connection):
-        pass
-
-    def __init__(self, x=0):
-        self.id = x
-        """Id of the Point"""
-        self.name = f"Point {x + 1}"
-        """Name of the Class"""
-        self.connections = []
-        """All Connetions in a list"""
-
-    def __call__(self, *args, **kwargs):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.name
-
-
-class Connection:
-    """Class has a connection list of Points taken when called.
-
-    By default, a price:
-        in range of 3-6 INCLUDING start and end"""
-
-    def take(self, bot, point):
-        """Return the other end of the point.
-
-        Adds the price of the point to the bot investment
-
-        Takes bot: Bot and point: Point"""
-
-        bot.investment += self.price
-        if point == self.connection_point1:
-            return self.connection_point2
-        else:
-            return self.connection_point1
-
-    def recalculate_price(self, start=3, end=6):
-        """Recalculate the price of a Connection.
-
-        By Default start=3, end=6 including start and end"""
-        self.price = randint(start, end)
-
-    def __init__(self, connection1, connection2):
-        self.name = f"Connection of {connection1.name} and {connection2.name}"
-        """Name of the Connection Point1"""
-        self.connection_point1 = connection1
-        """Name of the Connection Point2"""
-        self.connection_point2 = connection2
-        """List of two Points"""
-        self.price = randint(3, 6)
-        """Price to use the Path"""
-        connection1.connections.append(self)
-        connection2.connections.append(self)
-
-    def __call__(self, *args, **kwargs):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.name
-
-
-class Bot:
-
-    def __init__(self, bot_name="Fridolin", maze=PointBuilding(8)):
-        self.name = bot_name
-        self.current_point = maze.start
-        self.goal = maze.end
-        self.path = []
-        self.investment = 0
-        self.maze = maze
-
-    def __call__(self, *args, **kwargs):
-        return self.name
-
-    def __repr__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def find_path(self):
-        """Take a random path until self.current_point == self.goal"""
-        while not self.current_point == self.goal:
-            connectionindex = randint(0, len(self.current_point.connections) - 1)
-            self.current_point = self.current_point.connections[connectionindex].take(self, self.current_point)
+        self.position = self.start
