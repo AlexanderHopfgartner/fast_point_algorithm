@@ -19,6 +19,7 @@ def debug_print_maze(maze):
     print([x.price for x in maze.connections])
     print(maze.start, maze.end, "\n")
 
+
 class Timer:
 
     def time_stop(self):
@@ -32,28 +33,6 @@ class Timer:
     def __init__(self):
         self.start = time()
         self.time_stop = []
-
-
-
-
-class Bot:
-    def __init__(self, bot_name="Fridolin", start=0):
-        self.name = bot_name
-        self.current_point = start
-        self.path = []
-        self.investment = 0
-
-    def __call__(self, *args, **kwargs):
-        return self.name
-
-    def __repr__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def find_path(self):
-        pass
 
 
 class PointBuilding:
@@ -74,7 +53,7 @@ class PointBuilding:
                 distances = [1, 2]
         for distance in distances:
             for point in range(len(self.points) - distance):
-                all_connections.append(Connection([self.points[point], self.points[point + int(distance)]]))
+                all_connections.append(Connection(self.points[point], self.points[point + int(distance)]))
         self.connections = all_connections
         return all_connections
 
@@ -113,6 +92,7 @@ class PointBuilding:
         self.end = self.points[end]
 
     def set_start(self, start):
+
         """Change the start to the taken index"""
         self.start = self.points[start]
 
@@ -139,6 +119,14 @@ class PointBuilding:
         """Return random start Point"""
         return self.points[randint(0, len(self.points) - 1)]
 
+    def take_connection(self, bot, position, connection):
+        """Add the investment of the Connection changes the current locaiton from the bot
+
+        bot: Bot, position: Positon, connection: Conneciton"""
+        bot.current_point = connection.take(bot, position)
+
+
+
     def __init__(self, size: int):
         self.points_amount = size
         self.points = self.points_self()
@@ -148,11 +136,17 @@ class PointBuilding:
 
 
 class Point:
+
+    def add_conneciton(self, connection):
+        pass
+
     def __init__(self, x=0):
         self.id = x
         """Id of the Point"""
         self.name = f"Point {x + 1}"
         """Name of the Class"""
+        self.connections = []
+        """All Connetions in a list"""
 
     def __call__(self, *args, **kwargs):
         return self.name
@@ -170,19 +164,36 @@ class Connection:
     By default, a price:
         in range of 3-6 INCLUDING start and end"""
 
+    def take(self, bot, point):
+        """Return the other end of the point.
+
+        Adds the price of the point to the bot investment
+
+        Takes bot: Bot and point: Point"""
+
+        bot.investment += self.price
+        if point == self.connection_point1:
+            return self.connection_point2
+        else:
+            return self.connection_point1
+
     def recalculate_price(self, start=3, end=6):
         """Recalculate the price of a Connection.
 
         By Default start=3, end=6 including start and end"""
         self.price = randint(start, end)
 
-    def __init__(self, x: list):
-        self.name = f"Connection of {x[0].name} and {x[1].name}"
-        """Name of the Connection"""
-        self.connection = x
+    def __init__(self, connection1, connection2):
+        self.name = f"Connection of {connection1.name} and {connection2.name}"
+        """Name of the Connection Point1"""
+        self.connection_point1 = connection1
+        """Name of the Connection Point2"""
+        self.connection_point2 = connection2
         """List of two Points"""
         self.price = randint(3, 6)
         """Price to use the Path"""
+        connection1.connections.append(self)
+        connection2.connections.append(self)
 
     def __call__(self, *args, **kwargs):
         return self.name
@@ -193,3 +204,28 @@ class Connection:
     def __repr__(self):
         return self.name
 
+
+class Bot:
+
+    def __init__(self, bot_name="Fridolin", maze=PointBuilding(8)):
+        self.name = bot_name
+        self.current_point = maze.start
+        self.goal = maze.end
+        self.path = []
+        self.investment = 0
+        self.maze = maze
+
+    def __call__(self, *args, **kwargs):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+    def find_path(self):
+        """Take a random path until self.current_point == self.goal"""
+        while not self.current_point == self.goal:
+            connectionindex = randint(0, len(self.current_point.connections) - 1)
+            self.current_point = self.current_point.connections[connectionindex].take(self, self.current_point)
