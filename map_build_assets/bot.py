@@ -1,4 +1,4 @@
-from map_build import PointBuilding
+from map_build import PointBuilding, debug_print_maze
 from random import randint
 
 
@@ -22,7 +22,17 @@ class Bot:
         return self.name
 
     def find_path(self):
-        """Take a random path until self.current_point == self.goal"""
+        """Take the best in order of direction"""
         while not self.current_point == self.goal:
-            connection_index = randint(0, len(self.current_point.connections) - 1)
-            self.current_point = self.current_point.connections[connection_index].take(self, self.current_point)
+            if self.current_point.id + 1 < self.goal.id:
+                self.path.append(self.current_point.connections_up[1])
+                self.current_point = self.current_point.connections_up[1].move_to(self, self.current_point)
+            elif self.current_point.id < self.goal.id:
+                self.path.append(self.current_point.connections_up[0])
+                self.current_point = self.current_point.connections_up[0].move_to(self, self.current_point)
+            elif self.current_point.id - 1 > self.goal.id:
+                self.path.append(self.current_point.connections_down[1])
+                self.current_point = self.current_point.connections_down[1].move_to(self, self.current_point)
+            else:
+                self.path.append(self.current_point.connections_down[0])
+                self.current_point = self.current_point.connections_down[0].move_to(self, self.current_point)

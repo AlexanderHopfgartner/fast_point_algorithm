@@ -7,7 +7,7 @@ class Connection:
     By default, a price:
         in range of 3-6 INCLUDING start and end"""
 
-    def take(self, bot, point):
+    def move_to(self, bot, point):
         """Return the other end of the point.
 
         Adds the price of the point to the bot investment
@@ -35,10 +35,16 @@ class Connection:
         """List of two Points"""
         self.price = randint(3, 6)
         """Price to use the Path"""
-        self.direction: bool = True if connection1.id < connection2.id else False
-        """True if the conneciton direction is increasing in id"""
+        if connection1.id < connection2.id:
+            connection1.connections_up.append(self)
+            connection2.connections_down.append(self)
+        else:
+            connection1.connections_down.append(self)
+            connection2.connections_up.append(self)
+
         connection1.connections.append(self)
         connection2.connections.append(self)
+
 
     def __call__(self, *args, **kwargs):
         return self.name

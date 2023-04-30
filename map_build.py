@@ -19,8 +19,9 @@ def debug_print_maze(maze, bot):
     print([x.name for x in maze.points])
     print([x.name for x in maze.connections])
     print([x.price for x in maze.connections])
-    print(maze.start, maze.end, "\n")
-    print(bot.investment)
+    print(maze.start, maze.end)
+    print(bot.current_point)
+    print(bot.investment, bot.path, len(bot.path), "\n")
 
 class Timer:
 
@@ -88,11 +89,11 @@ class PointBuilding:
             connection.recalculate_price(start=price_start, end=price_end)
         self.set_start_end(start, end)
 
-    def set_end(self, end):
+    def set_end(self, end: int):
         """Change the end to the taken index"""
         self.end = self.points[end]
 
-    def set_start(self, start):
+    def set_start(self, start: int):
 
         """Change the start to the taken index"""
         self.start = self.points[start]
@@ -102,19 +103,22 @@ class PointBuilding:
 
         start: int = to index the start Point
         end: int = to index the end Point"""
+        if args:
+            self.set_start(args[0])
         try:
             kwargs["start"]
         except KeyError:
             self.start = self.start_self()
         else:
-            self.set_start([kwargs["start"]])
-
+            self.set_start(kwargs["start"])
+        if len(args) > 1:
+            self.set_end(args[1])
         try:
             kwargs["start"]
         except KeyError:
             self.end = self.end_self()
         else:
-            self.set_end([kwargs["end"]])
+            self.set_end(kwargs["end"])
 
     def start_self(self):
         """Return random start Point"""
@@ -124,7 +128,7 @@ class PointBuilding:
         """Add the investment of the Connection changes the current location from the bot
 
         bot: Bot, position: Position, connection: Conneciton"""
-        self.position.current_point = connection.take(self.position, position)
+        self.position.current_point = connection.move_to(self.position, position)
 
     def __init__(self, size: int):
         self.points_amount = size
