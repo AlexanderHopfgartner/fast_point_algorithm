@@ -36,3 +36,5 @@ class Bot:
             else:
                 self.path.append(self.current_point.connections_down[0])
                 self.current_point = self.current_point.connections_down[0].move_to(self, self.current_point)
+                
+    # Backtracking

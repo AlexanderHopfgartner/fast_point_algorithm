@@ -19,9 +19,11 @@ def debug_print_maze(maze, bot):
     print([x.name for x in maze.points])
     print([x.name for x in maze.connections])
     print([x.price for x in maze.connections])
+    print([connection.direction(point) for point in maze.points for connection in point.connections])
     print(maze.start, maze.end)
     print(bot.current_point)
     print(bot.investment, bot.path, len(bot.path), "\n")
+
 
 class Timer:
 
@@ -40,28 +42,26 @@ class Timer:
 class PointBuilding:
     """Takes a size: int, """
 
-    def connect_in_range(self, distances: list[int] = ""):
+    def connect_in_range(self, distances: tuple[int]):
         """Return a list of all Connections, By the points.
-        ints form the list, set the fixed distance form the points
+        ints form the tuple, set the fixed distance form the points
 
-        If any int in the distance: list[int] >= point_amount it become default
+        If any int in the distance: tuple[int] >= point_amount it become default
 
-        By default, [1, 2]"""
+        By default, (1, 2)"""
         all_connections = []
-        if distances == "":
-            distances = [1, 2]
         for x in distances:
             if x >= self.points_amount:
-                distances = [1, 2]
+                distances = (1, 2)
         for distance in distances:
             for point in range(len(self.points) - distance):
                 all_connections.append(Connection(self.points[point], self.points[point + int(distance)]))
         self.connections = all_connections
         return all_connections
 
-    def connect_self(self):
-        """Return a list of connects in range [1, 2]"""
-        return self.connect_in_range([1, 2])
+    def connect_self(self, distances: tuple[int] = (1, 2)):
+        """Return a list of connects in range (1, 2)"""
+        return self.connect_in_range(distances)
 
     def end_self(self):
         """Return random end Point"""
@@ -71,19 +71,18 @@ class PointBuilding:
         """Return a list of Points in the range of the points_amount"""
         return [Point(x) for x in range(self.points_amount)]
 
-    def rebuild_build_points(self, size: int = 8, distance: list[int] = [1, 2],
+    def rebuild_build_points(self, size: int = 8, distance: tuple[int] = (1, 2),
                              price_start: int = 3, price_end: int = 6, start: int = 0, end: int = -1):
         """Rebuild all points.
 
-        size: takes an int and RE-defines the point amount. By default, int(8)
+        size: takes an int and RE-defines the point amount. By default, 8
 
-        distance: takes a list of ints and RE-defines the distances between the points. By default, list(int(1), int(2))
+        distance: takes a tuple of ints and RE-defines the distances between the points. By default, tuple[int] (1, 2)
 
-        start: takes an int and RE-defines the start. By default, 3
-
-        Build all points in the given range of points_amount
-        connects them all by default, in a range of 1 and 2"""
+        start: takes an int and RE-defines the start. By default, 0
+        end: takes an int and RE-define the end. By default -1"""
         self.points_amount = size
+        self.points = self.points_self()
         self.connections = self.connect_in_range(distance)
         for connection in self.connections:
             connection.recalculate_price(start=price_start, end=price_end)

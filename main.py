@@ -5,10 +5,11 @@ from map_build_assets.bot import Bot
 def main():
     # TODO 1. Build the maze
     timer = Timer()
-    maze = PointBuilding(14)
-    maze.set_start_end(start=4, end=12)
+    maze = PointBuilding(8)
+    maze.rebuild_build_points(size=16, distance=(1, 3), price_start=1, price_end=12)
     fred = Bot(maze=maze)
     print()
+    debug_print_maze(maze, fred)
     fred.find_path()
     debug_print_maze(maze, fred)
     timer.end_time()

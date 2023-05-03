@@ -9,6 +9,7 @@ class Connection:
 
     def move_to(self, bot, point):
         """Return the other end of the point.
+        if point.id == self.connection_point1.id:
 
         Adds the price of the point to the bot investment
 
@@ -28,23 +29,26 @@ class Connection:
 
     def __init__(self, connection1, connection2):
         self.name = f"Connection of {connection1.name} and {connection2.name}"
-        """Name of the Connection Point1"""
+        """Name of the Connection"""
         self.connection_point1 = connection1
-        """Name of the Connection Point2"""
+        """Name of the Connection Point1"""
         self.connection_point2 = connection2
-        """List of two Points"""
+        """Name of the Connection Point2"""
         self.price = randint(3, 6)
         """Price to use the Path"""
-        if connection1.id < connection2.id:
-            connection1.connections_up.append(self)
-            connection2.connections_down.append(self)
-        else:
-            connection1.connections_down.append(self)
-            connection2.connections_up.append(self)
-
+        self.distance = connection2.id - connection1.id
+        """Distance form connection1, to connection2"""
         connection1.connections.append(self)
         connection2.connections.append(self)
 
+    def direction(self, point):
+        """Return the distance if the direction from the point is lower than the endpoint
+
+        else distance * -1"""
+        if point.id == self.connection_point1.id:
+            return self.distance
+        else:
+            return self.distance * -1
 
     def __call__(self, *args, **kwargs):
         return self.name
