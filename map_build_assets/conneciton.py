@@ -7,15 +7,10 @@ class Connection:
     By default, a price:
         in range of 3-6 INCLUDING start and end"""
 
-    def move_to(self, bot, point):
+    def move_from(self, point):
         """Return the other end of the point.
-        if point.id == self.connection_point1.id:
 
-        Adds the price of the point to the bot investment
-
-        Takes bot: Bot and point: Point"""
-
-        bot.investment += self.price
+        Takes point: Point"""
         if point == self.connection_point1:
             return self.connection_point2
         else:

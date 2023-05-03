@@ -16,14 +16,14 @@ def debug_print_maze(maze, bot):
     """prints:
 
     Point name///Connection name///Connection price///start///end"""
-    print([x.name for x in maze.points])
-    print([x.name for x in maze.connections])
-    print([x.price for x in maze.connections])
-    print([connection.direction(point) for point in maze.points for connection in point.connections])
-    print(maze.start, maze.end)
-    print(bot.current_point)
-    print(bot.investment, bot.path, len(bot.path), "\n")
-
+    print("\n\n\n")
+    print("Points:", [x.name for x in maze.points])
+    print("Connections:", [x.name for x in maze.connections])
+    print("Preise:", [x.price for x in maze.connections])
+    print("START:", maze.start, "ZIEL", maze.end)
+    print("aktuelle poisiton: ", bot.current_point)
+    print("Preis:", bot.price(bot.path), "Path", [[path, maze.connections.index(path)] for path in bot.path], "lenth of the path:", len(bot.path), "\n\n\n")
+    
 
 class Timer:
 
@@ -82,6 +82,11 @@ class PointBuilding:
         start: takes an int and RE-defines the start. By default, 0
         end: takes an int and RE-define the end. By default -1"""
         self.points_amount = size
+        self.points = []
+        self.connections = []
+        self.start = 0
+        self.end = 0
+
         self.points = self.points_self()
         self.connections = self.connect_in_range(distance)
         for connection in self.connections:
@@ -102,22 +107,23 @@ class PointBuilding:
 
         start: int = to index the start Point
         end: int = to index the end Point"""
-        if args:
-            self.set_start(args[0])
-        try:
-            kwargs["start"]
-        except KeyError:
-            self.start = self.start_self()
-        else:
-            self.set_start(kwargs["start"])
-        if len(args) > 1:
-            self.set_end(args[1])
-        try:
-            kwargs["start"]
-        except KeyError:
-            self.end = self.end_self()
-        else:
-            self.set_end(kwargs["end"])
+        while self.start == self.end:
+            if args:
+                self.set_start(args[0])
+            try:
+                kwargs["start"]
+            except KeyError:
+                self.start = self.start_self()
+            else:
+                self.set_start(kwargs["start"])
+            if len(args) > 1:
+                self.set_end(args[1])
+            try:
+                kwargs["start"]
+            except KeyError:
+                self.end = self.end_self()
+            else:
+                self.set_end(kwargs["end"])
 
     def start_self(self):
         """Return random start Point"""
@@ -133,6 +139,7 @@ class PointBuilding:
         self.points_amount = size
         self.points = self.points_self()
         self.connections = self.connect_self()
-        self.start = self.start_self()
-        self.end = self.end_self()
+        self.start = 0
+        self.end = 0
         self.position = self.start
+        self.set_start_end()

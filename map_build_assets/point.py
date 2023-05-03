@@ -1,16 +1,14 @@
 class Point:
+    point_id = 0
 
     def __init__(self, x=0):
+        Point.point_id += 1
         self.id = x
         """Id of the Point"""
         self.name = f"Point {x + 1}"
         """Name of the Class"""
         self.connections = []
         """All Connections in a list"""
-        self.connections_up = []
-        """All Connections in a list on the increasing path"""
-        self.connections_down = []
-        """All Connections in a list on the decreasing path"""
 
     def __call__(self, *args, **kwargs):
         return self.name
