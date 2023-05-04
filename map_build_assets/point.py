@@ -1,14 +1,17 @@
-class Point:
+class Point(object):
+    """Class is a Point in the Simulation.
+    take num: int """
     point_id = 0
 
-    def __init__(self, x=0):
+    def __init__(self, num: int = 0):
         Point.point_id += 1
-        self.id = x
-        """Id of the Point"""
-        self.name = f"Point {x + 1}"
-        """Name of the Class"""
+        self.point_id = Point.point_id
+        self.num = num
+        """Id of the Point."""
+        self.name = f"Point {num + 1}"
+        """Name of the Point."""
         self.connections = []
-        """All Connections in a list"""
+        """All Connections in a list."""
 
     def __call__(self, *args, **kwargs):
         return self.name
