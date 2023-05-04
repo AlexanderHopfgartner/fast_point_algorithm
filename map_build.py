@@ -12,18 +12,19 @@ def clear():
         _ = system('clear')
 
 
-def debug_print_maze(maze, bot):
-    """prints:
+def debug_print_maze(maze, bot, head_info):
+    """Return:
 
     Point name///Connection name///Connection price///start///end"""
-    print("\n\n\n")
-    print("Points:", [x.name for x in maze.points])
-    print("Connections:", [x.name for x in maze.connections])
-    print("Preise:", [x.price for x in maze.connections])
-    print("START:", maze.start, "ZIEL", maze.end)
-    print("aktuelle poisiton: ", bot.current_point)
-    print("Preis:", bot.price(bot.path), "Path", [[path, maze.connections.index(path)] for path in bot.path], "lenth of the path:", len(bot.path), "\n\n\n")
-    
+    return ["\n" + f"{head_info:^20}".center(80, "*") + "\n\n",
+            "Points:\t\t\t\t", [x.name for x in maze.points],
+            "Connections:\t\t", [x.name for x in maze.connections],
+            "Prices:\t\t\t\t", [str(x.price) for x in maze.connections],
+            "\nSTART:\t\t\t\t" + str(maze.start), "\nGOAL:\t\t\t\t" + str(maze.end),
+            "\ncurrent position:\t" + str(bot.current_point) + " ",
+            "Cost : " + str(bot.price(bot.path)), "\nPath: ",
+            [[path, maze.connections.index(path)] for path in bot.path], "length of the path:" + str(len(bot.path))]
+
 
 class Timer:
 
