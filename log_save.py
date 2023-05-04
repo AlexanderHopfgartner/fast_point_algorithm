@@ -1,5 +1,5 @@
 def log_save(log):
-    with open("logs/log.txt", "w") as file:
+    with open("logs/log_.txt ", "w") as file:
         for line in log:
             content = ""
             if not line:

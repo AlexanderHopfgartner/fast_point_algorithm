@@ -22,8 +22,8 @@ def debug_print_maze(maze, bot, head_info):
             "Prices:\t\t\t\t", [str(x.price) for x in maze.connections],
             "\nSTART:\t\t\t\t" + str(maze.start), "\nGOAL:\t\t\t\t" + str(maze.end),
             "\ncurrent position:\t" + str(bot.current_point) + " ",
-            "Cost : " + str(bot.price(bot.path)), "\nPath: ",
-            [[path, maze.connections.index(path)] for path in bot.path], "length of the path:" + str(len(bot.path))]
+            "\nCost : " + str(bot.price(bot.path)), "\nPath: ",
+            [[path, maze.connections.index(path)] for path in bot.path], "length of the path: " + str(len(bot.path))]
 
 
 class Timer:

@@ -1,0 +1,28 @@
+
+******************************      Default       ******************************
+
+
+
+Points:				Point 1, Point 2, Point 3, Point 4, Point 5, Point 6, Point 7, Point 8, Point 9, Point 10, Point 11, Point 12, Point 13, Point 14, Point 15, Point 16, Point 17, Point 18, Point 19, Point 20, 
+Connections:		Connection of Point 1 and Point 2, Connection of Point 2 and Point 3, Connection of Point 3 and Point 4, Connection of Point 4 and Point 5, Connection of Point 5 and Point 6, Connection of Point 6 and Point 7, Connection of Point 7 and Point 8, Connection of Point 8 and Point 9, Connection of Point 9 and Point 10, Connection of Point 10 and Point 11, Connection of Point 11 and Point 12, Connection of Point 12 and Point 13, Connection of Point 13 and Point 14, Connection of Point 14 and Point 15, Connection of Point 15 and Point 16, Connection of Point 16 and Point 17, Connection of Point 17 and Point 18, Connection of Point 18 and Point 19, Connection of Point 19 and Point 20, Connection of Point 1 and Point 6, Connection of Point 2 and Point 7, Connection of Point 3 and Point 8, Connection of Point 4 and Point 9, Connection of Point 5 and Point 10, Connection of Point 6 and Point 11, Connection of Point 7 and Point 12, Connection of Point 8 and Point 13, Connection of Point 9 and Point 14, Connection of Point 10 and Point 15, Connection of Point 11 and Point 16, Connection of Point 12 and Point 17, Connection of Point 13 and Point 18, Connection of Point 14 and Point 19, Connection of Point 15 and Point 20, 
+Prices:				12, 13, 20, 16, 4, 10, 3, 16, 12, 2, 14, 7, 18, 15, 7, 16, 11, 9, 3, 17, 2, 10, 6, 5, 13, 4, 12, 12, 20, 6, 11, 5, 6, 9, 
+
+START:				Point 5
+GOAL:				Point 19
+current position:	Point 5 
+Cost : 0
+Path:  [ Empty ] length of the path: 0
+****************************** Backtrack, normal  ******************************
+
+
+
+Points:				Point 1, Point 2, Point 3, Point 4, Point 5, Point 6, Point 7, Point 8, Point 9, Point 10, Point 11, Point 12, Point 13, Point 14, Point 15, Point 16, Point 17, Point 18, Point 19, Point 20, 
+Connections:		Connection of Point 1 and Point 2, Connection of Point 2 and Point 3, Connection of Point 3 and Point 4, Connection of Point 4 and Point 5, Connection of Point 5 and Point 6, Connection of Point 6 and Point 7, Connection of Point 7 and Point 8, Connection of Point 8 and Point 9, Connection of Point 9 and Point 10, Connection of Point 10 and Point 11, Connection of Point 11 and Point 12, Connection of Point 12 and Point 13, Connection of Point 13 and Point 14, Connection of Point 14 and Point 15, Connection of Point 15 and Point 16, Connection of Point 16 and Point 17, Connection of Point 17 and Point 18, Connection of Point 18 and Point 19, Connection of Point 19 and Point 20, Connection of Point 1 and Point 6, Connection of Point 2 and Point 7, Connection of Point 3 and Point 8, Connection of Point 4 and Point 9, Connection of Point 5 and Point 10, Connection of Point 6 and Point 11, Connection of Point 7 and Point 12, Connection of Point 8 and Point 13, Connection of Point 9 and Point 14, Connection of Point 10 and Point 15, Connection of Point 11 and Point 16, Connection of Point 12 and Point 17, Connection of Point 13 and Point 18, Connection of Point 14 and Point 19, Connection of Point 15 and Point 20, 
+Prices:				12, 13, 20, 16, 4, 10, 3, 16, 12, 2, 14, 7, 18, 15, 7, 16, 11, 9, 3, 17, 2, 10, 6, 5, 13, 4, 12, 12, 20, 6, 11, 5, 6, 9, 
+
+START:				Point 5
+GOAL:				Point 19
+current position:	Point 19 
+Cost : 32
+Path: [Connection of Point 5 and Point 10, 23], [Connection of Point 10 and Point 11, 9], [Connection of Point 11 and Point 16, 29], [Connection of Point 15 and Point 16, 14], [Connection of Point 15 and Point 20, 33], [Connection of Point 19 and Point 20, 18], 
+length of the path: 6
