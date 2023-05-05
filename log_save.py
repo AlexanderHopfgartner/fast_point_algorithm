@@ -1,5 +1,4 @@
-def log_save(log, time):
-    print(time)
+def log_save(log):
     with open("logs/log.txt ", "w") as file:
         for line in log:
             content = ""
@@ -13,4 +12,3 @@ def log_save(log, time):
                     content += str(item) + ", "
                 line = "\n"
             file.write(content + line)
-        file.write("\n\n\nTime:\t\t" + f"{time:.8f}")

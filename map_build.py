@@ -28,35 +28,6 @@ def debug_print_maze(maze, bot, head_info) -> list[str]:
             [[path, maze.connections.index(path)] for path in bot.path], "length of the path: " + str(len(bot.path))]
 
 
-class Timer(object):
-    """Class is a timer to keep track at time"""
-
-    def break_timer(self):
-        """ss: int = 0\t\tAdd a time_passed to the time_stop
-
-        ss: int = 1\t\t add the time stop and start to the time_stop"""
-        if self.time_stop:
-            self.stops.append(time() - self.time_stop)
-            self.time_stop = False
-        else:
-            self.time_stop = time()
-
-    def time_passed(self) -> float:
-        """Return time passed since start excluding breaks"""
-        if self.stops:
-            return (time() - sum(self.stops)) - self.start
-        return time() - self.start
-
-    def print_time(self):
-        """Print the time taken by the machine"""
-        print(self.time_passed())
-
-    def __init__(self):
-        self.start = time()
-        self.time_stop: int = 0
-        self.stops: list = []
-
-
 class PointBuilding(object):
     """Class is a Simulation holder
     takes:

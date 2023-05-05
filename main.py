@@ -1,20 +1,21 @@
-from map_build import PointBuilding, debug_print_maze, Timer
+from map_build import PointBuilding, debug_print_maze
 from map_build_assets.bot import Bot
 from log_save import log_save
 
 
+def distance_div(start, distance):
+    print(start + distance)
+    return start
+
+
 def main():
-    timer = Timer()
-    maze = PointBuilding(size=6, distances=(1, 3), start=2, end=4)
+    maze = PointBuilding(size=512, distances=(1, 3, 5, 7, 11), start=3, end=500)
     fred = Bot(maze=maze)
     log = debug_print_maze(maze, fred, "Default")
-    fred.find_path(timer)
-    new_log = debug_print_maze(maze, fred, "Backtrack, normal")
+    new_log = fred.find_path()
     for item in new_log:
         log.append(item)
-    print(timer.time_passed())
-    log_save(log, timer.time_passed())
-    print(timer.time_passed())
+    log_save(log)
 
 
 if __name__ == "__main__":

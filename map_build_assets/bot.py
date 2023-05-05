@@ -1,5 +1,4 @@
-from map_build import PointBuilding, Timer, debug_print_maze
-from random import randint
+from map_build import PointBuilding, debug_print_maze
 
 
 class BotHolder:
@@ -14,18 +13,29 @@ class BotHolder:
         self.current_path = []
         self.path_holder = []
         self.maze = args[0].maze
+        self.orderd_connections = []
 
     def backtrack(self):
         """Return with all bruteforce path POSSIBILITIES copied in the path_holder."""
         if self.current_point == self.goal:
-            self.path_holder.append(self.current_path[::])
+            self.path_holder.append(self.current_path[:])
             return
-        print(self.current_path)
         for connection in self.current_point.connections:
             if connection not in self.current_path:
                 self.move_unmove(connection)
                 self.backtrack()
                 self.move_unmove(connection)
+
+    def closest(self, distance):
+        return self.current_point.connections[min(range(len(self.current_point.connections)), key=lambda i: abs([connection.direction(self.current_point) for connection in self.current_point.connections][i] - distance))]
+
+    def distance_ordered(self):
+        ordered_list = []
+        all_connections = self.current_point.connections
+        while all_connections:
+            closest_connection = self.closest(self.goal.num)
+            ordered_list.append(all_connections.pop(all_connections.index(closest_connection)))
+        return ordered_list
 
     def move_unmove(self, connection):
         """Move the connection: Connection.
@@ -36,6 +46,16 @@ class BotHolder:
         else:
             self.current_path.append(connection)
         self.current_point = connection.move_from(self.current_point)
+
+    def fast_backtrack(self):
+        if self.current_point == self.goal:
+            self.path_holder.append(self.current_path[:])
+            return
+        for connection in self.distance_ordered():
+            if connection not in self.current_path:
+                self.move_unmove(connection)
+                self.fast_backtrack()
+                self.move_unmove(connection)
 
 
 def calc_price(path):
@@ -57,28 +77,32 @@ class Bot(BotHolder):
     def current_price(self):
         return sum([connection.price for connection in self.current_path])
 
-    def find_path(self, timer: Timer):
-        breaker = timer.break_timer
+    def find_path(self):
         action = ""
         while not action:
-            breaker()
-            action = input("Please enter your preferred method [normal/better/quit]:\n>>>").lower()[0]
-            breaker()
+            new_log = []
+            action = input("Please enter your preferred method [normal/fast/quit]:\n>>>").lower()[0]
             if action == "n":
                 self.backtrack()
+                self.path = self.path_holder[[calc_price(path) for path in self.path_holder].index(
+                    min([calc_price(path) for path in self.path_holder]))]
+                self.investment = self.price()
+                [self.take_path(connection) for connection in self.path]
+                new_log = debug_print_maze(self.maze, self, "Backtrack, normal")
+                self.investment = 0
+                [self.take_path(connection) for connection in self.path[::-1]]
+                self.path, self.path_holder = ([], [])
+            elif action == "f":
+                self.fast_backtrack()
                 self.path = self.path_holder[[calc_price(path) for path in self.path_holder].index(min([calc_price(path) for path in self.path_holder]))]
                 self.investment = self.price()
                 [self.take_path(connection) for connection in self.path]
-            elif action == "b":
-                pass
+                new_log = debug_print_maze(self.maze, self, "Backtrack, fast")
             elif action == "q":
                 break
             else:
-                print("Error Invalid input")
-            breaker()
-            if input("Do an other? [yes/no]").lower()[0] == "y":
-                action = ""
-            breaker()
+                print("Invalid input")
+            return new_log
 
     def __init__(self, maze: PointBuilding, bot_name: str = "Fred"):
         self.name = bot_name
@@ -97,7 +121,6 @@ class Bot(BotHolder):
 
     def __str__(self):
         return self.name
-
 
     #     # if self.current_location == self.goal:
     #     #     if not self.path:
