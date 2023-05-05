@@ -30,6 +30,7 @@ class BotHolder:
         return self.current_point.connections[min(range(len(self.current_point.connections)), key=lambda i: abs([connection.direction(self.current_point) for connection in self.current_point.connections][i] - distance))]
 
     def distance_ordered(self):
+        """Return all connections possible ordered in the distance"""
         ordered_list = []
         all_connections = self.current_point.connections
         while all_connections:
@@ -48,6 +49,7 @@ class BotHolder:
         self.current_point = connection.move_from(self.current_point)
 
     def fast_backtrack(self):
+        """Return the fastest way from current_point to goal"""
         if self.current_point == self.goal:
             self.path_holder.append(self.current_path[:])
             return
@@ -58,7 +60,10 @@ class BotHolder:
                 self.move_unmove(connection)
 
 
-def calc_price(path):
+def calc_price(path: list):
+    """Return the sum of the path cost
+
+    path: list[connection]"""
     return sum([connection.price for connection in path])
 
 
@@ -78,6 +83,9 @@ class Bot(BotHolder):
         return sum([connection.price for connection in self.current_path])
 
     def find_path(self):
+        """Return the new log of the path chosen
+
+        find_path loop"""
         action = ""
         while not action:
             new_log = []
@@ -121,38 +129,3 @@ class Bot(BotHolder):
 
     def __str__(self):
         return self.name
-
-    #     # if self.current_location == self.goal:
-    #     #     if not self.path:
-    #     #         self.path = self.current_path
-    #     #     if self.current_price() < self.price():
-    #     #         self.path = self.current_path
-    #     # for connection in self.current_location.connections:
-    #     #     if connection not in self.current_path:
-    #     #         self.take_path(connection)
-    #     #         self.find_path1()
-    #     #         self.untake_path(connection)
-    #     # print(self.path)
-    #     # self.investment = self.price()
-    #     # self.move_path()
-    #
-    # def find_path(self):
-    #     """Take the fastest path, from current_point to goal by orienting py Points and Connections"""
-    #     while not self.current_point == self.goal:
-    #         pass
-    #
-    #     # while not self.current_point == self.goal:
-    #     #     if self.current_point.id + 1 < self.goal.id:
-    #     #         self.path.append(self.current_point.connections_up[1])
-    #     #         self.current_point = self.current_point.connections_up[1].move_from(self, self.current_point)
-    #     #     elif self.current_point.id < self.goal.id:
-    #     #         self.path.append(self.current_point.connections_up[0])
-    #     #         self.current_point = self.current_point.connections_up[0].move_from(self, self.current_point)
-    #     #     elif self.current_point.id - 1 > self.goal.id:
-    #     #         self.path.append(self.current_point.connections_down[1])
-    #     #         self.current_point = self.current_point.connections_down[1].move_from(self, self.current_point)
-    #     #     else:
-    #     #         self.path.append(self.current_point.connections_down[0])
-    #     #         self.current_point = self.current_point.connections_down[0].move_from(self, self.current_point)
-    #
-    # # Backtracking
