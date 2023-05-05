@@ -106,6 +106,10 @@ class Bot(BotHolder):
                 self.investment = self.price()
                 [self.take_path(connection) for connection in self.path]
                 new_log = debug_print_maze(self.maze, self, "Backtrack, fast")
+                # [print(path, len(path), "\n\n", path[0:3], "\n\n", path[:-3]) for path in self.path_holder]
+                self.investment = 0
+                [self.take_path(connection) for connection in self.path[::-1]]
+                self.path, self.path_holder = ([], [])
             elif action == "q":
                 break
             else:
