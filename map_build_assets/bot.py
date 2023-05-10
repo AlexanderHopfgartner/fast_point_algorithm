@@ -20,6 +20,7 @@ class BotHolder:
         if self.current_point == self.goal:
             self.path_holder.append(self.current_path[:])
             return
+        print(self.current_path)
         for connection in self.current_point.connections:
             if connection not in self.current_path:
                 self.move_unmove(connection)
@@ -28,6 +29,9 @@ class BotHolder:
 
     def closest(self, distance):
         return self.current_point.connections[min(range(len(self.current_point.connections)), key=lambda i: abs([connection.direction(self.current_point) for connection in self.current_point.connections][i] - distance))]
+
+    def cheapest(self):
+        return self.current_point.connections[min(range(len(self.current_point.connections)), key=lambda i: [connection.price for connection in self.current_point.connections][i])]
 
     def distance_ordered(self):
         """Return all connections possible ordered in the distance"""
@@ -48,7 +52,7 @@ class BotHolder:
             self.current_path.append(connection)
         self.current_point = connection.move_from(self.current_point)
 
-    def fast_backtrack(self):
+    def fastest_goal_backtrack(self):
         """Return the fastest way from current_point to goal"""
         if self.current_point == self.goal:
             self.path_holder.append(self.current_path[:])
@@ -56,7 +60,7 @@ class BotHolder:
         for connection in self.distance_ordered():
             if connection not in self.current_path:
                 self.move_unmove(connection)
-                self.fast_backtrack()
+                self.fastest_goal_backtrack()
                 self.move_unmove(connection)
 
 
@@ -101,7 +105,7 @@ class Bot(BotHolder):
                 [self.take_path(connection) for connection in self.path[::-1]]
                 self.path, self.path_holder = ([], [])
             elif action == "f":
-                self.fast_backtrack()
+                self.fastest_goal_backtrack()
                 self.path = self.path_holder[[calc_price(path) for path in self.path_holder].index(min([calc_price(path) for path in self.path_holder]))]
                 self.investment = self.price()
                 [self.take_path(connection) for connection in self.path]

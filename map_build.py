@@ -1,8 +1,8 @@
 from random import randint
 from os import system, name
-from time import time
 from map_build_assets.conneciton import Connection
 from map_build_assets.point import Point
+from typing import NewType
 
 
 def clear():
@@ -12,7 +12,7 @@ def clear():
         _ = system('clear')
 
 
-Distances = tuple[int, int]
+Distances = NewType("Distances", tuple[int])
 
 
 def debug_print_maze(maze, bot, head_info) -> list[str]:
